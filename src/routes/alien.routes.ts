@@ -93,8 +93,10 @@ router.get('/aliens', listarAliens);
  *       - in: path
  *         name: id
  *         required: true
+ *         description: ID numérico positivo do alien
  *         schema:
  *           type: integer
+ *           minimum: 1
  *         example: 1
  *     responses:
  *       200:
@@ -103,6 +105,8 @@ router.get('/aliens', listarAliens);
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Alien'
+ *       400:
+ *         description: ID inválido
  *       404:
  *         description: Alien não encontrado
  *       500:
@@ -146,8 +150,10 @@ router.post('/aliens', criarAlien);
  *       - in: path
  *         name: id
  *         required: true
+ *         description: ID numérico positivo do alien
  *         schema:
  *           type: integer
+ *           minimum: 1
  *         example: 1
  *     requestBody:
  *       required: true
@@ -163,7 +169,7 @@ router.post('/aliens', criarAlien);
  *             schema:
  *               $ref: '#/components/schemas/Alien'
  *       400:
- *         description: Dados inválidos
+ *         description: ID ou dados inválidos
  *       404:
  *         description: Alien não encontrado
  */
@@ -180,12 +186,16 @@ router.put('/aliens/:id', atualizarAlien);
  *       - in: path
  *         name: id
  *         required: true
+ *         description: ID numérico positivo do alien
  *         schema:
  *           type: integer
+ *           minimum: 1
  *         example: 1
  *     responses:
  *       204:
  *         description: Alien excluído com sucesso
+ *       400:
+ *         description: ID inválido
  *       404:
  *         description: Alien não encontrado
  *       500:

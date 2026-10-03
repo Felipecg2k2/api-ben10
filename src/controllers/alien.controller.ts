@@ -1,6 +1,20 @@
 import { Request, Response } from 'express';
 import Alien from '../models/alien.model.js';
 
+const validarId = (idParam: string | string[]): number | null => {
+  if (Array.isArray(idParam)) {
+    return null;
+  }
+
+  const id = Number(idParam);
+
+  if (!Number.isInteger(id) || id <= 0) {
+    return null;
+  }
+
+  return id;
+};
+
 // GET /aliens
 export const listarAliens = async (_req: Request, res: Response) => {
   try {
@@ -17,7 +31,15 @@ export const listarAliens = async (_req: Request, res: Response) => {
 // GET /aliens/:id
 export const buscarAlienPorId = async (req: Request, res: Response) => {
   try {
-    const alien = await Alien.findByPk(String(req.params.id));
+    const id = validarId(req.params.id);
+
+    if (id === null) {
+      return res.status(400).json({
+        mensagem: 'O id deve ser um número inteiro positivo.',
+      });
+    }
+
+    const alien = await Alien.findByPk(id);
 
     if (!alien) {
       return res.status(404).json({
@@ -98,7 +120,10 @@ export const criarAlien = async (req: Request, res: Response) => {
     return res.status(201).json(alien);
   } catch (error) {
     return res.status(400).json({
-      mensagem: error instanceof Error ? error.message : 'Erro ao criar alien.',
+      mensagem:
+        error instanceof Error
+          ? error.message
+          : 'Erro ao criar alien.',
     });
   }
 };
@@ -106,7 +131,15 @@ export const criarAlien = async (req: Request, res: Response) => {
 // PUT /aliens/:id
 export const atualizarAlien = async (req: Request, res: Response) => {
   try {
-    const alien = await Alien.findByPk(String(req.params.id));
+    const id = validarId(req.params.id);
+
+    if (id === null) {
+      return res.status(400).json({
+        mensagem: 'O id deve ser um número inteiro positivo.',
+      });
+    }
+
+    const alien = await Alien.findByPk(id);
 
     if (!alien) {
       return res.status(404).json({
@@ -176,9 +209,10 @@ export const atualizarAlien = async (req: Request, res: Response) => {
     return res.status(200).json(alien);
   } catch (error) {
     return res.status(400).json({
-      mensagem: error instanceof Error
-        ? error.message
-        : 'Erro ao atualizar alien.',
+      mensagem:
+        error instanceof Error
+          ? error.message
+          : 'Erro ao atualizar alien.',
     });
   }
 };
@@ -186,7 +220,15 @@ export const atualizarAlien = async (req: Request, res: Response) => {
 // DELETE /aliens/:id
 export const excluirAlien = async (req: Request, res: Response) => {
   try {
-    const alien = await Alien.findByPk(String(req.params.id));
+    const id = validarId(req.params.id);
+
+    if (id === null) {
+      return res.status(400).json({
+        mensagem: 'O id deve ser um número inteiro positivo.',
+      });
+    }
+
+    const alien = await Alien.findByPk(id);
 
     if (!alien) {
       return res.status(404).json({
